@@ -1,10 +1,14 @@
 package com.rxmobileteam.lecture1.service;
 
 import com.rxmobileteam.lecture1.data.ProductDao;
+import com.rxmobileteam.lecture1.data.ProductInterface;
 import com.rxmobileteam.utils.ExerciseNotCompletedException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ProductService} provides an API that allows to manage {@link Product}s.
@@ -14,26 +18,28 @@ import java.util.List;
  */
 public class ProductService {
 
-    /**
-     * Adds a new product to the system.
-     *
-     * @param product a product to add
-     * @return {@code true} if a product was added, {@code false} otherwise.
-     */
-    public boolean addProduct(@NotNull Product product) {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+    private final ProductInterface productInterface;
+
+    public ProductService(ProductInterface productInterface) {
+        this.productInterface = productInterface;
     }
 
-    /**
-     * Returns all products that contains the given query in the name or description.
-     *
-     * @param query a search query
-     * @return a list of found products
-     */
+
+    public boolean addProduct(@NotNull Product product) {
+        if (productInterface.add(product) == true)  return true;
+        else return false;
+
+    }
+
     @NotNull
     public List<Product> searchProducts(@NotNull String query) {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+        Set<Product> products = productInterface.findAll();
+        List<Product> result = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getName().toLowerCase().contains(query.toLowerCase())) {
+                result.add(product);
+            }
+        }
+        return result;
     }
 }

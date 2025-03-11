@@ -23,6 +23,22 @@ public class Product {
         this.price = price;
     }
 
+    public @NotNull String getId() {
+        return id;
+    }
+
+    public @NotNull String getName() {
+        return name;
+    }
+
+    public @NotNull String getDescription() {
+        return description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
