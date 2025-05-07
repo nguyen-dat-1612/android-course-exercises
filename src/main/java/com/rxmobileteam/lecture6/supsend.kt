@@ -5,6 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 @JvmInline
 value class UserId(val id: Int)
@@ -76,23 +78,34 @@ internal class RealUserRepository(
   private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
   override suspend fun findUserById(id: UserId): User? {
-    // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    // Call userApi's methods  on ioDispatcher
+    return withContext(ioDispatcher) {
+      userApi.findUserById(id)
+    }
   }
 
-  override suspend fun getPostsByUserId(id: UserId): List<Post> {
+  override suspend fun getPostsByUserId(id: UserId): List<Post> = withContext(ioDispatcher) {
     // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    val user = userApi.findUserById(id)
+    if (user != null) {
+      userApi.getPostsByUser(user)
+    } else {
+      emptyList()
+    }
   }
 
-  override suspend fun findUserAndPostsById(id: UserId): UserAndPosts? {
+  override suspend fun findUserAndPostsById(id: UserId): UserAndPosts?  = withContext(ioDispatcher) {
     // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    userApi.findUserById(id)?.let { user: User -> UserAndPosts(user, userApi.getPostsByUser(user)) }
   }
 
-  override suspend fun findUserAndUserDetailsById(id: UserId): UserAndDetails? {
-    // Call concurrently userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+  override suspend fun findUserAndUserDetailsById(id: UserId): UserAndDetails? = withContext(ioDispatcher) {
+    // Call userApi's methods on ioDispatcher
+    val user  = async { userApi.findUserById(id) }
+    val detail = async { userApi.findDetailsByUser(id) }
+
+    user.await()?.let { UserAndDetails(it, detail.await()!!) }
+
   }
 }
 

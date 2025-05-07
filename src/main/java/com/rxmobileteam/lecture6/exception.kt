@@ -35,12 +35,16 @@ class DemoModel(
     // Call logger.log() with the result of maybeFailedFunction()
     // Call logger.logError() with the exception and a message
     // Note: You must preserve the cancellation semantics of the coroutine
-
     scope.launch {
-      maybeFailedFunction()
+      try {
+        val result = maybeFailedFunction()
+        logger.log("Result: $result")
+      } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        logger.logError(e, "Error")
+      }
     }
   }
-
   fun cancelAndJoinBlocking() {
     runBlocking {
       scope.coroutineContext.job.cancelAndJoin()
@@ -60,3 +64,4 @@ fun main() = runBlocking {
   // At this point, the coroutine should have been cancelled
   // Nothing should be printed to the console
 }
+
