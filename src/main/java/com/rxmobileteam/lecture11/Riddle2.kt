@@ -10,7 +10,18 @@ object Riddle2 {
    * Use case: You want to transform the data.
    */
   fun solve(source: Observable<Int>): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.map {it + 1}
   }
+}
+
+fun main() {
+  Riddle2.solve(Observable.just(10))
+    .test()
+    .assertResult(11)
+
+  Riddle2.solve(Observable.just(10))
+    .materialize()
+    .subscribe(::println)
+
+  println("NICE WORK!")
 }

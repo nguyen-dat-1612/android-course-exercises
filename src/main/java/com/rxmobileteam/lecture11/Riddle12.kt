@@ -10,7 +10,17 @@ object Riddle12 {
    * Use case: Getting a network error and you want to recover and show some default state.
    */
   fun solve(source: Observable<Int>): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.onErrorReturnItem(5)
   }
+}
+
+fun main() {
+  val source = Observable.just(1, 2)
+    .concatWith(Observable.error(Exception("Error")))
+
+  Riddle12.solve(source).subscribe(
+    { next -> println("Next: $next") },
+    { error -> println("Error: ${error.message}") },
+    { println("Completed") } // OnComplete
+  )
 }

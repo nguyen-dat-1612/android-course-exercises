@@ -11,7 +11,15 @@ object Riddle4 {
    * Use case: Some button that can toggle two states. For instance a switch between White & Dark theme.
    */
   fun solve(source: Observable<Unit>): Observable<Boolean> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.scan(false) {
+      prev, _ -> !prev
+    }.startWithItem(false)
   }
+
+}
+
+fun main() {
+  val source = Observable.just(Unit, Unit, Unit, Unit) // 4 event phát liên tiếp
+  Riddle4.solve(source).subscribe { println(it) }
+  Thread.sleep(2000)
 }

@@ -10,7 +10,12 @@ object Riddle3 {
    * Use case: You want to filter certain items out.
    */
   fun solve(source: Observable<Int>): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+     return source.filter{it % 2 == 0}
   }
 }
+fun main() {
+  val source = Observable.just(1, 2, 3, 4, 5, 6)
+  Riddle3.solve(source).subscribe { println(it) }
+}
+
+

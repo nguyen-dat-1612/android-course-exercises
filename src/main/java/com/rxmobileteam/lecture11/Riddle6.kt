@@ -12,7 +12,16 @@ object Riddle6 {
    * Use case: Execute two network requests in parallel and wait for each other and process the combined data.
    */
   fun solve(first: Single<Int>, second: Single<Int>): Single<Pair<Int, Int>> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return Single.zip(first, second) { t1, t2 -> Pair(t1, t2) }
   }
+}
+
+fun main() {
+  val first = Single.just(1)
+  val second = Single.just(2)
+
+  Riddle6.solve(first, second)
+    .subscribe { pair -> println("First: ${pair.first}, Second: ${pair.second}") }
+
+  Thread.sleep(2000)
 }

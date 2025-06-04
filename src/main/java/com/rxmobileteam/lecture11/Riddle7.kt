@@ -10,7 +10,12 @@ object Riddle7 {
    * Use case: You never want to show the same value twice.
    */
   fun solve(source: Observable<Int>): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.distinctUntilChanged()
   }
+}
+
+fun main() {
+  val source = Observable.just(1, 2, 2, 4, 5, 5, 6, 6, 7, 1)
+  Riddle7.solve(source).subscribe { item -> println("item: $item") }
+  Thread.sleep(3000)
 }

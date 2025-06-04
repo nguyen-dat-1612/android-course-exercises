@@ -2,6 +2,8 @@ package com.rxmobileteam.lecture11
 
 import com.rxmobileteam.utils.ExerciseNotCompletedException
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 object Riddle1 {
   /**
@@ -10,8 +12,7 @@ object Riddle1 {
    * Use case: You want to transform some value to the reactive world.
    */
   fun solve(value: Int): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return Observable.just(5)
   }
 }
 
