@@ -10,7 +10,14 @@ object Riddle21 {
    * Use case: Sometimes you can't do everything reactively and need to break out of it.
    */
   fun solve(source: Observable<Int>): Int {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.blockingFirst()
   }
+}
+fun main() {
+  val source = Observable.just(5, 10, 15)
+
+  val result = Riddle21.solve(source)
+  println("Nhận: $result")
+
+  Thread.sleep(3000)
 }

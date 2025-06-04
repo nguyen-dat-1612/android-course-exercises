@@ -10,7 +10,18 @@ object Riddle23 {
    * Use case: You get some data from a bad source and know for sure it's of a certain type that you require.
    */
   fun solve(source: Observable<Any>): Observable<String> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return source.map {
+      println("Loại: ${it::class.simpleName} và giá trị: $it")
+      it.toString()
+    }
   }
+}
+
+fun main() {
+  val source = Observable.fromArray<Any>("Dat", "Thanh", "Nguyen", 1, 2, 31313, 121)
+
+  Riddle23.solve(source).subscribe(
+    { println("Loại: ${it::class.simpleName} và giá trị: $it") },
+    { error -> println("Error: ${error.message}") }
+  )
 }

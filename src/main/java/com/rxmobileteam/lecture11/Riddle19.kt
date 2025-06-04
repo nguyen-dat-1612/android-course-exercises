@@ -11,11 +11,46 @@ object Riddle19 {
    * Use case: Transform any listener into an Observable.
    */
   fun solve(interaction: Interaction): Observable<Int> {
-    // TODO: implement this method
-    throw ExerciseNotCompletedException()
+    return Observable.create { emitter ->
+      // Gán listener mới
+      val callback: (Int) -> Unit = { value ->
+        if (!emitter.isDisposed) {
+          emitter.onNext(value)
+        }
+      }
+
+      interaction.listener = callback
+
+      // Khi Observable bị dispose, gỡ listener
+      emitter.setCancellable {
+        interaction.listener = null
+      }
+    }
   }
 
   interface Interaction {
     var listener: ((Int) -> Unit)?
   }
+}
+
+fun main() {
+  val interaction = object : Riddle19.Interaction {
+    override var listener: ((Int) -> Unit)? = null
+  }
+
+  val disposable = Riddle19.solve(interaction)
+    .subscribe { value ->
+      println("Nhận: $value")
+    }
+
+  interaction.listener?.invoke(1)
+  interaction.listener?.invoke(2)
+
+  println("Gọi dispose")
+  disposable.dispose()
+
+  println("Gọi listener khi đã dispose")
+  interaction.listener?.invoke(3)
+
+  println("Kết thúc");
 }
